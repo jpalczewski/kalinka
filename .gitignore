@@ -4,8 +4,9 @@
 #Config file
 config.ini
 
-#all plotly reports
+#all plotly report and ipython notebook
 temp-plot.html
+workbook.ipynb
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

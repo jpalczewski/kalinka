@@ -1,6 +1,8 @@
 from multiprocessing import Pool,cpu_count
+import click
 
 def ExecuteForAllFiles(db, func):
+    click.secho("Warning: don't use that db during that operation, because all files are reinserted", fg='yellow')
     files = db.files
     allFiles = list(files.find({}))
     results = None

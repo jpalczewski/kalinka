@@ -6,6 +6,7 @@ import click
 import pymongo
 
 from SimpleCommands import init, health, initModule, status, languages
+from Stats import stats, statsInit
 
 motd ="""
   _         _ _       _
@@ -35,6 +36,7 @@ cli.add_command(health)
 cli.add_command(init)
 cli.add_command(status)
 cli.add_command(languages)
+cli.add_command(stats)
 
 logger = logging.getLogger('kalinka')
 logger.setLevel(logging.INFO)
@@ -48,9 +50,10 @@ if __name__ == '__main__':
     try:
         config = configparser.ConfigParser()
         config.read('config.ini')
-        conn = pymongo.MongoClient(config['server']['host'], int(config['server']['port']), serverSelectionTimeoutMS=2000)
+        conn = pymongo.MongoClient(config['server']['host'], int(config['server']['port']), serverSelectionTimeoutMS=2000, connect=False)
         db = conn[config['server']['database']]
         initModule(conn, db)
+        statsInit(conn, db)
     except Exception as e:
         logger.critical("Database or config file exception:{err}".format(err=e))
         sys.exit(1)

@@ -21,9 +21,9 @@ db = []
 
 
 @click.group()
-@click.option('--info', 'level', flag_value=1, default=True)
-@click.option('--debug', 'level', flag_value=2)
-@click.option('--quiet', 'level', flag_value=0)
+@click.option('--info', 'level', flag_value=1, default=True,help="Shows only info messages")
+@click.option('--debug', 'level', flag_value=2, help="Shows debug messages")
+@click.option('--quiet', 'level', flag_value=0, help="Only error messages.")
 def cli(level):
     levels = [logging.ERROR, logging.INFO, logging.DEBUG]
     ch.setLevel(levels[level])

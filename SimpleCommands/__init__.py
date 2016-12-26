@@ -11,7 +11,7 @@ def initModule(conn_, db_):
     conn = conn_
     db = db_
 
-@click.command()
+@click.command(help="Check if database is healthy.")
 def health():
     healthy = IsDatabaseHealthy(conn, db, False)
     click.echo('Database status:')
@@ -21,7 +21,7 @@ def health():
         click.secho("Something is wrong", fg='red')
 
 
-@click.command()
+@click.command(help="Initialize database.")
 def init():
     try:
         db.create_collection('sets')
@@ -34,7 +34,8 @@ def init():
     click.secho("Database sucessfully initialised", fg='green')
 
 
-@click.command(name='status')
+
+@click.command(help="Print count of files, networks and sets")
 def status():
     if not IsDatabaseHealthy(conn, db):
         click.secho("I won't tell anything because database is invalid.", fg='red')
@@ -44,8 +45,8 @@ def status():
         print(collection,"\t\t", db[collection].find({}).count())
 
 
-@click.command()
-@click.option('--plotly/--no-plotly', default=False)
+@click.command(help="Show what kind of files are available in files collection.")
+@click.option('--plotly/--no-plotly', default=False, help="Generates html graph")
 def languages(plotly):
     logger = logging.getLogger('kalinka.languages')
     files = db.files

@@ -1,6 +1,12 @@
 #Idea directory
 .idea/
 
+#Config file
+config.ini
+
+#all plotly reports
+temp-plot.html
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

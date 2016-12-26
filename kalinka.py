@@ -5,7 +5,7 @@ import sys
 import click
 import pymongo
 
-from SimpleCommands import init, health, initModule, status
+from SimpleCommands import init, health, initModule, status, languages
 
 motd ="""
   _         _ _       _
@@ -34,7 +34,7 @@ def cli(level):
 cli.add_command(health)
 cli.add_command(init)
 cli.add_command(status)
-
+cli.add_command(languages)
 
 logger = logging.getLogger('kalinka')
 logger.setLevel(logging.INFO)

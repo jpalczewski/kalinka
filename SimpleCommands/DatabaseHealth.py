@@ -1,6 +1,6 @@
 import logging
 
-status_logger = logging.getLogger('kalinka.DatabaseStatus')
+status_logger = logging.getLogger('kalinka.IsDatabaseHealthy')
 
 
 def IsDatabaseHealthy(conn, db, quiet=True):

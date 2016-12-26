@@ -5,7 +5,7 @@ import sys
 import click
 import pymongo
 
-from SimpleCommands import init, status, initModule
+from SimpleCommands import init, health, initModule, status
 
 motd ="""
   _         _ _       _
@@ -31,8 +31,9 @@ def cli(level):
 
 
 #Defining whole structure
-cli.add_command(status)
+cli.add_command(health)
 cli.add_command(init)
+cli.add_command(status)
 
 
 logger = logging.getLogger('kalinka')

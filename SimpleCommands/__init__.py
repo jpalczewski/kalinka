@@ -1,6 +1,6 @@
 import click
 import logging
-from SimpleCommands.DatabaseStatus import IsDatabaseHealthy
+from SimpleCommands.DatabaseHealth import IsDatabaseHealthy
 
 conn = None
 db = None
@@ -12,7 +12,7 @@ def initModule(conn_, db_):
     db = db_
 
 @click.command()
-def status():
+def health():
     healthy = IsDatabaseHealthy(conn, db)
     click.echo('Database status:')
     if healthy:
@@ -32,3 +32,13 @@ def init():
         click.secho("Database cannot be initialised", fg='red')
         return
     click.secho("Database sucessfully initialised", fg='green')
+
+
+@click.command(name='status')
+def status():
+    if not IsDatabaseHealthy(conn, db):
+        click.secho("I won't tell anything because database is invalid.", fg='red')
+
+    print("Number of records:")
+    for collection in db.collection_names():
+        print(collection,"\t\t", db[collection].find({}).count())

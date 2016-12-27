@@ -10,11 +10,12 @@ def statsInit(conn_, db_):
     conn = conn_
     db = db_
 
-@click.group()
+@click.group(help='Group related with calculating statistics in database')
 def stats():
     pass
 
-@click.group()
+
+@click.group(help='Group of time-consuming function.')
 def generate():
     pass
 
@@ -27,7 +28,7 @@ def clean():
 
     ExecuteForAllFiles(db, removeStats)
 
-@click.command()
+@click.command(help='Calculate "simple" statistics')
 def simple():
     if not IsDatabaseHealthy(conn, db):
         click.secho("Don't do it.", fg='red')
@@ -46,7 +47,7 @@ def generateSimple(f):
     clearToASCII(c_ascii, c_char)
 
     lines = cleaned.split("\n")
-    lines = [clearToASCII({}, dict(Counter(x).items())) for x in lines]
+   # lines = [clearToASCII({}, dict(Counter(x).items())) for x in lines]
 
     if 'stats' not in f:
         f['stats'] = {}

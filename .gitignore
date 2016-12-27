@@ -4,6 +4,9 @@
 #Config file
 config.ini
 
+#Temporary files
+*.txt
+
 #all plotly report and ipython notebook
 temp-plot.html
 workbook.ipynb

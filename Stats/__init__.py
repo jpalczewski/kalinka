@@ -39,34 +39,34 @@ stats.add_command(clean)
 stats.add_command(generate)
 generate.add_command(simple)
 
+
 def generateSimple(f):
-    cleaned = f['content'].replace("\0", "")
-    c_char = dict(Counter(cleaned).items())
-    #c_tokens = dict(Counter(cleaned.split()).items())
-    c_ascii = {}
-    clearToASCII(c_ascii, c_char)
+    c_ascii = Counter((c for c in splitascii_iter(f['content'])))
+ #   c_lines = (Counter(c) for c in splitnewlines_iter(f['content']))
 
-    lines = cleaned.split("\n")
-   # lines = [clearToASCII({}, dict(Counter(x).items())) for x in lines]
-
+    c_ascii = removeDotsAndDollars(c_ascii)
+#    c_lines = (removeDotsAndDollars(d) for d in c_lines)
+#   'ascii_per_lines':list(c_lines)
     if 'stats' not in f:
         f['stats'] = {}
-    f['stats']['simple'] = {'ascii':c_ascii, 'ascii_per_lines':lines}
+    f['stats']['simple'] = {'ascii':c_ascii}
     return f
 
 
-def clearToASCII(c_ascii, c_char):
-    for k in c_char:
-        if ord(k) < 128:
-            c_ascii[k] = c_char[k]
-    if '.' in c_ascii:
-        c_ascii['dot'] = c_ascii.pop('.')
-    if '$' in c_ascii:
-        c_ascii['dollar'] = c_ascii.pop('$')
+def splitnewlines_iter(string):
+    return (x.group(0) for x in re.finditer(r".*\n|.+$", string))
 
-    return c_ascii
+def splitascii_iter(string):
+    for c in string:
+        if ord(c) < 128 and ord(c) > 0:
+            yield c
 
-
+def removeDotsAndDollars(d):
+    if '$' in d:
+        d['dollar'] = d.pop('$')
+    if '.' in d:
+        d['dot'] = d.pop('.')
+    return d
 def removeStats(f):
     f.pop('stats', None)
     return f

@@ -7,6 +7,7 @@ import pymongo
 
 from SimpleCommands import init, health, initModule, status, languages
 from Stats import stats, statsInit
+from ImportFiles import import_group, import_init
 
 motd ="""
   _         _ _       _
@@ -37,6 +38,7 @@ cli.add_command(init)
 cli.add_command(status)
 cli.add_command(languages)
 cli.add_command(stats)
+cli.add_command(import_group)
 
 logger = logging.getLogger('kalinka')
 logger.setLevel(logging.INFO)
@@ -54,6 +56,7 @@ if __name__ == '__main__':
         db = conn[config['server']['database']]
         initModule(conn, db)
         statsInit(conn, db)
+        import_init(conn,db,config)
     except Exception as e:
         logger.critical("Database or config file exception:{err}".format(err=e))
         sys.exit(1)

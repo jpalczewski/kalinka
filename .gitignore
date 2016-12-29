@@ -4,6 +4,9 @@
 #Config file
 config.ini
 
+#data directory
+data
+
 #Temporary files
 *.txt
 

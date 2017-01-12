@@ -5,7 +5,7 @@ from plotly.offline import plot
 conn = None
 db = None
 
-def initModule(conn_, db_):
+def simpleInit(conn_, db_):
     global conn
     global db
     conn = conn_
@@ -39,6 +39,7 @@ def init():
 def status():
     if not IsDatabaseHealthy(conn, db):
         click.secho("I won't tell anything because database is invalid.", fg='red')
+        return
 
     print("Number of records:")
     for collection in db.collection_names():
@@ -48,9 +49,12 @@ def status():
 @click.command(help="Show what kind of files are available in files collection.")
 @click.option('--plotly/--no-plotly', default=False, help="Generates html graph")
 def languages(plotly):
+    if not IsDatabaseHealthy(conn, db):
+        click.secho("I won't tell anything because database is invalid.", fg='red')
+        return
     logger = logging.getLogger('kalinka.languages')
     files = db.files
-    allLanguages = files.distinct("language")
+    allLanguages = files.distinct("filetype")
     numOfFiles = {}
 
     logger.debug("allLanguages: %s", allLanguages)

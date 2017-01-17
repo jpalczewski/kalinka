@@ -1,3 +1,4 @@
+import json
 import click
 from multiprocessing import Pool
 from pathlib import Path
@@ -48,7 +49,7 @@ def import_full():
         with f.open() as fh:
             try:
                 content = fh.read()
-                files_collection.insert_one({'filetype':ext, 'content':content,'language':language_lookup_table[ext], 'hash':hash, 'stats':{'simple':{}}})
+                files_collection.insert_one({'filetype':ext, 'content':content,'language':language_lookup_table[ext], 'hash':hash})
             except Exception as e:
                 click.secho("ERROR: {0}".format(e), fg='red')
     def countAscii(f, hash):
@@ -115,9 +116,17 @@ def CountSimpleStats(file, hash):
             sumOfOccurences = sum(ascii_count_per_line[-1].values())
             for key, value in ascii_count_per_line[-1].items():
                 ascii_count_per_line[-1][key] = value/sumOfOccurences
-        sumOfOccurences = sum(ascii_count.values())
+
+    sumOfOccurences = sum(ascii_count.values())
     for key, value in ascii_count.items():
         ascii_count[key] = value / sumOfOccurences
-    files_collection.update_one({'hash':hash}, {"$set":{'stats':{'simple':{'ascii_count':ascii_count, 'ascii_count_per_line':ascii_count_per_line}}}}
+    try:
+        files_collection.update_one({'hash':hash},
+                                    {'$set':{'filepath':file.as_posix(),
+                                  'ascii_count_per_line_size':len(ascii_count_per_line),
+                                     'ascii_count':ascii_count,
+                                 'ascii_count_per_line': ascii_count_per_line}})
+    except Exception as e:
+        print(e)
+    print('ok')#{"$set":{'stats':{'simple':{'ascii_count':ascii_count, 'ascii_count_per_line':ascii_count_per_line}}}}
         #db.files.updateOne({hash:'3fecd45b11216e1c9f9a53bcf9810ec9'},{ $set: {stats:{simple:{ascii:{'a':2}}}}})
-    )
